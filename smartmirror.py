@@ -83,18 +83,16 @@ class Clock(Frame):
 
 
     def toggle_clock_UI(self):
-        # Turn on UI element
+        # Turn off UI element
         if not self.ui_on:
             self.timeLbl.pack_forget()
             self.dayOWLbl.pack_forget()
             self.dateLbl.pack_forget()
-            self.ui_on = True
-        # Turn off UI element
+        # Turn on UI element
         else:
             self.timeLbl.pack(side=TOP, anchor=E)
             self.dayOWLbl.pack(side=TOP, anchor=E)
             self.dateLbl.pack(side=TOP, anchor=E)
-            self.ui_on = False
 
 
     def tick(self):
@@ -157,16 +155,15 @@ class Weather(Frame):
         self.get_weather()
 
     def toggle_weather_UI(self):
-        # Turn on UI element
-        if self.ui_on:
+        # Turn off UI element
+        if not self.ui_on:
             self.degreeFrm.pack_forget()
             self.temperatureLbl.pack_forget()
             self.iconLbl.pack_forget()
             self.currentlyLbl.pack_forget()
             self.forecastLbl.pack_forget()
             self.locationLbl.pack_forget()
-            self.ui_on = True
-        # Turn off UI element
+        # Turn on UI element
         else:
             self.degreeFrm.pack(side=TOP, anchor=W)
             self.temperatureLbl.pack(side=LEFT, anchor=N)
@@ -174,7 +171,6 @@ class Weather(Frame):
             self.currentlyLbl.pack(side=TOP, anchor=W)
             self.forecastLbl.pack(side=TOP, anchor=W)
             self.locationLbl.pack(side=TOP, anchor=W)
-            self.ui_on = False
 
     def get_ip(self):
         try:
@@ -263,7 +259,7 @@ class Weather(Frame):
             traceback.print_exc()
             print(f"Error: {e}. Cannot get weather.")
 
-        self.after(10000, self.get_weather)
+        self.after(5000, self.get_weather)
 
 
     @staticmethod
@@ -284,15 +280,14 @@ class News(Frame):
         self.get_headlines()
 
     def toggle_news_UI(self):
-        if self.ui_on:
+        # turn off UI element
+        if not self.ui_on:
             self.newsLbl.pack_forget()
             self.headlinesContainer.pack_forget()
-            self.ui_on = False
+        # turn on UI element
         else:
             self.newsLbl.pack(side=TOP, anchor=W)
             self.headlinesContainer.pack(side=TOP)
-            self.ui_on = True
-        self.after(10000, self.toggle_news_UI)
 
     def get_headlines(self):
         try:
@@ -306,6 +301,15 @@ class News(Frame):
 
             feed = feedparser.parse(headlines_url)
 
+            # Check config file to show UI or not
+            with open("config.json") as f:
+                config = json.load(f)
+                if config["news_ui_on"]:
+                   self.ui_on = True
+                else:
+                    self.ui_on = False
+                self.toggle_news_UI()
+
             for post in feed.entries[0:5]:
                 headline = NewsHeadline(self.headlinesContainer, post.title)
                 headline.pack(side=TOP, anchor=W)
@@ -313,7 +317,7 @@ class News(Frame):
             traceback.print_exc()
             print(f"Error: {e}. Cannot get news.")
 
-        self.after(60000, self.get_headlines)
+        self.after(5000, self.get_headlines)
 
 
 class NewsHeadline(Frame):

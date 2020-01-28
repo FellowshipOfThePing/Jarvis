@@ -1,6 +1,6 @@
 {
     "ui_on": true,
     "weather_ui_on": true,
-    "time_ui_on": false,
-    "news_ui_on": false
+    "time_ui_on": true,
+    "news_ui_on": true
 }
