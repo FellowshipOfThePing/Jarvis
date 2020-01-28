@@ -22,9 +22,7 @@ time_format = 12
 date_format = "%b %d, %Y"   
 news_country_code = 'us'
 geolocation_api_token = os.environ.get("GEO_LOCATE_KEY")
-print(geolocation_api_token)
 weather_api_token = os.environ.get("WEATHER_KEY")
-print(weather_api_token)
 weather_lang = 'en'         
 weather_unit = 'us'         
 latitude = None             
@@ -33,6 +31,7 @@ xlarge_text_size = 94
 large_text_size = 48
 medium_text_size = 28
 small_text_size = 18
+
 
 @contextmanager
 def setlocale(name): # thread proof function to work with locale
@@ -66,6 +65,8 @@ icon_lookup = {
 class Clock(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg='black')
+        # ui status
+        self.ui_on = True
         # initialize time label
         self.time1 = ''
         self.timeLbl = Label(self, font=('Helvetica', large_text_size), fg="white", bg="black")
@@ -79,6 +80,21 @@ class Clock(Frame):
         self.dateLbl = Label(self, text=self.date1, font=('Helvetica', small_text_size), fg="white", bg="black")
         self.dateLbl.pack(side=TOP, anchor=E)
         self.tick()
+
+
+    def toggle_clock_UI(self):
+        if self.ui_on:
+            self.timeLbl.pack_forget()
+            self.dayOWLbl.pack_forget()
+            self.dateLbl.pack_forget()
+            self.ui_on = False
+        else:
+            self.timeLbl.pack(side=TOP, anchor=E)
+            self.dayOWLbl.pack(side=TOP, anchor=E)
+            self.dateLbl.pack(side=TOP, anchor=E)
+            self.ui_on = True
+        self.after(10000, self.toggle_clock_UI)
+
 
     def tick(self):
         with setlocale(ui_locale):
@@ -108,6 +124,7 @@ class Clock(Frame):
 class Weather(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg='black')
+        self.ui_on = True
         self.temperature = ''
         self.forecast = ''
         self.location = ''
@@ -127,6 +144,24 @@ class Weather(Frame):
         self.locationLbl.pack(side=TOP, anchor=W)
         self.get_weather()
 
+    def toggle_weather_UI(self):
+        if self.ui_on:
+            self.degreeFrm.pack_forget()
+            self.temperatureLbl.pack_forget()
+            self.iconLbl.pack_forget()
+            self.currentlyLbl.pack_forget()
+            self.forecastLbl.pack_forget()
+            self.locationLbl.pack_forget()
+            self.ui_on = False
+        else:
+            self.degreeFrm.pack(side=TOP, anchor=W)
+            self.temperatureLbl.pack(side=LEFT, anchor=N)
+            self.iconLbl.pack(side=LEFT, anchor=N, padx=20)
+            self.currentlyLbl.pack(side=TOP, anchor=W)
+            self.forecastLbl.pack(side=TOP, anchor=W)
+            self.locationLbl.pack(side=TOP, anchor=W)
+            self.ui_on = True
+
     def get_ip(self):
         try:
             ip_url = "http://jsonip.com/"
@@ -139,7 +174,6 @@ class Weather(Frame):
 
     def get_weather(self):
         try:
-
             if latitude is None and longitude is None:
                 # get location
                 location_req_url = "https://api.ipgeolocation.io/ipgeo?apiKey=%s&ip=%s" % (geolocation_api_token, self.get_ip())
@@ -206,7 +240,8 @@ class Weather(Frame):
             traceback.print_exc()
             print(f"Error: {e}. Cannot get weather.")
 
-        self.after(600000, self.get_weather)
+        self.after(10000, self.get_weather)
+
 
     @staticmethod
     def convert_kelvin_to_fahrenheit(kelvin_temp):
@@ -216,6 +251,7 @@ class Weather(Frame):
 class News(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
+        self.ui_on = True
         self.config(bg='black')
         self.title = 'News' # 'News' is more internationally generic
         self.newsLbl = Label(self, text=self.title, font=('Helvetica', medium_text_size), fg="white", bg="black")
@@ -224,6 +260,16 @@ class News(Frame):
         self.headlinesContainer.pack(side=TOP)
         self.get_headlines()
 
+    def toggle_news_UI(self):
+        if self.ui_on:
+            self.newsLbl.pack_forget()
+            self.headlinesContainer.pack_forget()
+            self.ui_on = False
+        else:
+            self.newsLbl.pack(side=TOP, anchor=W)
+            self.headlinesContainer.pack(side=TOP)
+            self.ui_on = True
+        self.after(10000, self.toggle_news_UI)
 
     def get_headlines(self):
         try:
