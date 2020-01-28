@@ -164,5 +164,18 @@
 
     "other": {
         "switch_off": ["Audio/Other/caged_sleep_0.wav", "Audio/Other/caged_sleep_2.wav"]
+    },
+
+    "times": {
+        "extras": {
+            "morning": "Audio/Time/caged_clock_afternoon.wav",
+            "night": "Audio/Time/caged_clock_late_2_s.wav"
+        },
+        "meridiem": {
+            "AM": "Audio/Time/caged_clock_am.wav",
+            "PM": "Audio/Time/caged_clock_pm.wav"
+        },
+        "now": "Audio/Time/caged_clock_time_0.wav",
+        "oclock": "Audio/Time/caged_clock_oclock.wav"
     }
 }

@@ -70,7 +70,11 @@ def get_weather_from_api():
 
 
 def get_weather_from_jarvis():
-    """Retrieves weather information from API and returns as speech"""
+    """
+    Retrieves weather information from API and returns as speech
+    
+    KEYWORD: 'weather'
+    """
     
     data = get_weather_from_api()
 
@@ -99,9 +103,9 @@ def get_weather_from_jarvis():
 
 def get_date_from_jarvis():
     """
-    Retrieves date and time information from datetime modules and returns as speech.
+    Retrieves date information from datetime modules and returns as speech.
     
-    Should say: 'It is weekday, month, day'
+    KEYWORD: 'date'
     """
     
     # TODO: Consider creating individual methods of this as well. Ex: "What year/month/day is it?"
@@ -123,8 +127,55 @@ def get_date_from_jarvis():
     play(date_response)
 
 
+def get_time_from_jarvis():
+    """
+    Retrieves time information from datetime modules and returns as speech.
+
+    KEYWORD: 'time'
+    """
+
+    # Get strings of hour and minute
+    time_list = str(datetime.datetime.now())[11:16].split(':')
+    hour = time_list[0]
+    minute = time_list[1]
+
+    # Determine if AM or PM
+    if int(hour) <= 12:
+        meridiem = 'AM'
+    else:
+        meridiem = 'PM'
+
+    # Revert hour value to 12 hour time scale
+    hour = str(int(hour) % 12)  
+
+    # Get time in audio
+    it_is_now = AudioSegment.from_wav(audio_paths["times"]["now"])
+    hour_audio = AudioSegment.from_wav(audio_paths["numbers"][hour])
+    minute_audio = AudioSegment.from_wav(audio_paths["numbers"][minute])
+    meridiem_audio = AudioSegment.from_wav(audio_paths["times"]["meridiem"][meridiem])
+
+    # Concatenate response and play
+    time_response = it_is_now + hour_audio + minute_audio + meridiem_audio
+    play(time_response)
+
+
+def get_summary_from_jarvis():
+    """
+    Calls all following commands from Jarvis:
+        Weather
+        Date
+        Time
+
+    KEYWORD: 'summary'
+    """
+    get_date_from_jarvis()
+    get_time_from_jarvis()
+    get_weather_from_jarvis()
+
+
+
 def main():
-    pass
+    get_summary_from_jarvis()
 
 
 if __name__ == '__main__':

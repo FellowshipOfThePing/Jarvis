@@ -24,6 +24,8 @@ class Jarvis(object):
             self.audio_paths = json.load(f)
         self.command_dict = {'weather': get_weather_from_jarvis,
                              'date': get_date_from_jarvis,
+                             'time': get_time_from_jarvis,
+                             'summary': get_summary_from_jarvis,
                              'thank': self.jarvis_stop_listening,
                              'thanks': self.jarvis_stop_listening,
                              'introduce': self.introduction,
