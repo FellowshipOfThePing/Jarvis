@@ -69,7 +69,7 @@ def get_weather_from_api():
         print(f"Error: {e}. Cannot get weather.")
 
 
-def get_weather_from_jarvis():
+def get_weather_from_jarvis(*args):
     """
     Retrieves weather information from API and returns as speech
     
@@ -101,7 +101,7 @@ def get_weather_from_jarvis():
     play(temp_response + condition_response)
 
 
-def get_date_from_jarvis():
+def get_date_from_jarvis(*args):
     """
     Retrieves date information from datetime modules and returns as speech.
     
@@ -127,7 +127,7 @@ def get_date_from_jarvis():
     play(date_response)
 
 
-def get_time_from_jarvis():
+def get_time_from_jarvis(*args):
     """
     Retrieves time information from datetime modules and returns as speech.
 
@@ -146,7 +146,8 @@ def get_time_from_jarvis():
         meridiem = 'PM'
 
     # Revert hour value to 12 hour time scale
-    hour = str(int(hour) % 12)  
+    if hour != '12':
+        hour = str(int(hour) % 12)
 
     # Get time in audio
     it_is_now = AudioSegment.from_wav(audio_paths["times"]["now"])
@@ -159,7 +160,7 @@ def get_time_from_jarvis():
     play(time_response)
 
 
-def get_summary_from_jarvis():
+def get_summary_from_jarvis(*args):
     """
     Calls all following commands from Jarvis:
         Weather

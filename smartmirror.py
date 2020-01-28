@@ -83,26 +83,29 @@ class Clock(Frame):
 
 
     def toggle_clock_UI(self):
-        if self.ui_on:
+        # Turn on UI element
+        if not self.ui_on:
             self.timeLbl.pack_forget()
             self.dayOWLbl.pack_forget()
             self.dateLbl.pack_forget()
-            self.ui_on = False
+            self.ui_on = True
+        # Turn off UI element
         else:
             self.timeLbl.pack(side=TOP, anchor=E)
             self.dayOWLbl.pack(side=TOP, anchor=E)
             self.dateLbl.pack(side=TOP, anchor=E)
-            self.ui_on = True
-        self.after(10000, self.toggle_clock_UI)
+            self.ui_on = False
 
 
     def tick(self):
+        # Set locale
         with setlocale(ui_locale):
             if time_format == 12:
                 time2 = time.strftime('%I:%M %p') #hour in 12h format
             else:
                 time2 = time.strftime('%H:%M') #hour in 24h format
 
+            # Set visuals
             day_of_week2 = time.strftime('%A')
             date2 = time.strftime(date_format)
             # if time string has changed, update it
@@ -115,6 +118,15 @@ class Clock(Frame):
             if date2 != self.date1:
                 self.date1 = date2
                 self.dateLbl.config(text=date2)
+
+            # Check config file to show UI or not
+            with open("config.json") as f:
+                config = json.load(f)
+                if config["time_ui_on"]:
+                   self.ui_on = True
+                else:
+                    self.ui_on = False
+                self.toggle_clock_UI()
             # calls itself every 200 milliseconds
             # to update the time display as needed
             # could use >200 ms, but display gets jerky
@@ -145,6 +157,7 @@ class Weather(Frame):
         self.get_weather()
 
     def toggle_weather_UI(self):
+        # Turn on UI element
         if self.ui_on:
             self.degreeFrm.pack_forget()
             self.temperatureLbl.pack_forget()
@@ -152,7 +165,8 @@ class Weather(Frame):
             self.currentlyLbl.pack_forget()
             self.forecastLbl.pack_forget()
             self.locationLbl.pack_forget()
-            self.ui_on = False
+            self.ui_on = True
+        # Turn off UI element
         else:
             self.degreeFrm.pack(side=TOP, anchor=W)
             self.temperatureLbl.pack(side=LEFT, anchor=N)
@@ -160,7 +174,7 @@ class Weather(Frame):
             self.currentlyLbl.pack(side=TOP, anchor=W)
             self.forecastLbl.pack(side=TOP, anchor=W)
             self.locationLbl.pack(side=TOP, anchor=W)
-            self.ui_on = True
+            self.ui_on = False
 
     def get_ip(self):
         try:
@@ -191,9 +205,18 @@ class Weather(Frame):
                 location2 = ""
                 # get weather
                 weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s?lang=%s&units=%s" % (weather_api_token, latitude, longitude, weather_lang, weather_unit)
-
+            
             r = requests.get(weather_req_url)
             weather_obj = json.loads(r.text)
+
+            # Check config file to show UI or not
+            with open("config.json") as f:
+                config = json.load(f)
+                if config["weather_ui_on"]:
+                   self.ui_on = True
+                else:
+                    self.ui_on = False
+                self.toggle_weather_UI()
 
             degree_sign= u'\N{DEGREE SIGN}'
             temperature2 = "%s%s" % (str(int(weather_obj['currently']['temperature'])), degree_sign)

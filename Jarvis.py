@@ -7,7 +7,7 @@ import time
 import json
 import random
 import subprocess
-
+from config import *
 
 
 class Jarvis(object):
@@ -26,6 +26,8 @@ class Jarvis(object):
                              'date': get_date_from_jarvis,
                              'time': get_time_from_jarvis,
                              'summary': get_summary_from_jarvis,
+                             'show': jarvis_change_ui,
+                             'hide': jarvis_change_ui,
                              'thank': self.jarvis_stop_listening,
                              'thanks': self.jarvis_stop_listening,
                              'introduce': self.introduction,
@@ -106,7 +108,9 @@ class Jarvis(object):
 
             # Execute commands
             for command in command_queue:
-                command()
+                break_value = command(speech)
+                if break_value:
+                    break
 
             if not command_queue:
                 self.no_keywords_found()
@@ -123,7 +127,7 @@ class Jarvis(object):
         play(response)
 
 
-    def introduction(self):
+    def introduction(self, *args):
         """
         Jarvis introduces himself.
 
@@ -132,17 +136,17 @@ class Jarvis(object):
         self.jarvis_response("Audio/Greeting/caged_intro_2.wav")
 
     
-    def jarvis_stop_listening(self):
+    def jarvis_stop_listening(self, *args):
         """
         Ends active listening.
         
-        KEYWORD: 'thank(s)'
+        KEYWORDS: 'thank(s)'
         """
         self.jarvis_response("Audio/Other/caged_confirm_10_s.wav")
         self.actively_listening = False
 
 
-    def jarvis_off(self):
+    def jarvis_off(self, *args):
         """
         Switches Jarvis off entirely.
         
@@ -153,22 +157,22 @@ class Jarvis(object):
         sys.exit()
 
 
-    def jarvis_recognition_error(self):
+    def jarvis_recognition_error(self, *args):
         """Responds with audio error message when google cannot recognize speech"""
         self.jarvis_response("Audio/Other/caged_repeat_3.wav")
 
     
-    def jarvis_request_error(self):
+    def jarvis_request_error(self, *args):
         """Reponds with audio when google cannot be reached"""
         self.jarvis_response("Audio/Other/caged_network_lost_wifi.wav")
 
 
-    def no_keywords_found(self):
+    def no_keywords_found(self, *args):
         """Reponds with audio when no keywords are found in speech"""
         self.jarvis_response("Audio/Other/caged_unavailable_0.wav")
 
 
-    def shut_down_machine(self):
+    def shut_down_machine(self, *args):
         """
         Shuts off the host machine.
         
