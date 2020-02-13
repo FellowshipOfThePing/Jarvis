@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 # local files, mostly ignored for copyright reasons
-assets/
 Audio/
 Video/
 tk/

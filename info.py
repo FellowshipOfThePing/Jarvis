@@ -1,4 +1,4 @@
-# Methods to retrieve weather information and parse into Jarvis audio
+# Methods to retrieve API information and parse into Jarvis audio
 
 import requests
 import json
@@ -71,7 +71,7 @@ def get_weather_from_api():
 
 def get_weather_from_jarvis(*args):
     """
-    Retrieves weather information from API and returns as speech
+    Parse weather information and return as speech
     
     KEYWORD: 'weather'
     """
@@ -103,12 +103,12 @@ def get_weather_from_jarvis(*args):
 
 def get_date_from_jarvis(*args):
     """
-    Retrieves date information from datetime modules and returns as speech.
+    Parse date information from datetime modules and return as speech.
     
     KEYWORD: 'date'
     """
     
-    # TODO: Consider creating individual methods of this as well. Ex: "What year/month/day is it?"
+    # TODO: Consider creating individual methods for this as well. Ex: "What year/month/day is it?"
 
     # Get date in text
     weekday = str(datetime.datetime.today().weekday())
@@ -116,25 +116,25 @@ def get_date_from_jarvis(*args):
     month = today[1]
     day = today[2]
 
-    # Get date in audio
+    # Convert date to audio
     weekday_audio = AudioSegment.from_wav(audio_paths['dates']['days'][weekday])
     month_audio = AudioSegment.from_wav(audio_paths['dates']['months'][month])
     day_audio = AudioSegment.from_wav(audio_paths['dates']['numbers'][day])
     it_is = AudioSegment.from_wav(audio_paths['dates']['it_is'])
 
-    # Concatenate response and play
+    # Concatenate response and playback
     date_response = it_is + weekday_audio + month_audio + day_audio
     play(date_response)
 
 
 def get_time_from_jarvis(*args):
     """
-    Retrieves time information from datetime modules and returns as speech.
+    Retrieve time information from datetime modules and return as speech.
 
     KEYWORD: 'time'
     """
 
-    # Get strings of hour and minute
+    # Get time in text
     time_list = str(datetime.datetime.now())[11:16].split(':')
     hour = time_list[0]
     minute = time_list[1]
@@ -149,20 +149,20 @@ def get_time_from_jarvis(*args):
     if hour != '12':
         hour = str(int(hour) % 12)
 
-    # Get time in audio
+    # Convert time to audio
     it_is_now = AudioSegment.from_wav(audio_paths["times"]["now"])
     hour_audio = AudioSegment.from_wav(audio_paths["numbers"][hour])
     minute_audio = AudioSegment.from_wav(audio_paths["numbers"][minute])
     meridiem_audio = AudioSegment.from_wav(audio_paths["times"]["meridiem"][meridiem])
 
-    # Concatenate response and play
+    # Concatenate response and playback
     time_response = it_is_now + hour_audio + minute_audio + meridiem_audio
     play(time_response)
 
 
 def get_summary_from_jarvis(*args):
     """
-    Calls all following commands from Jarvis:
+    Call all following commands from Jarvis:
         Weather
         Date
         Time
@@ -176,7 +176,7 @@ def get_summary_from_jarvis(*args):
 
 
 def main():
-    get_summary_from_jarvis()
+    pass
 
 
 if __name__ == '__main__':

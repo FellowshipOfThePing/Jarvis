@@ -1,14 +1,17 @@
-# File for configuring interface settings like UI visibility - reference config.json
-# TODO: Refactor toggle functions, maybe just a single 'hide' and single 'show', change values based on args?
+# Config functions for toggling ui status values in config.json
+# TODO: Consider refactoring toggle functions into individual on/off functions
+
 import json
 
 
 def toggle_weather_ui():
+    """Change boolean value for 'weather_ui_on' in config.json"""
+
     # Open config file, load as dictionary
     with open("config.json", "r") as f:
         config = json.load(f)
 
-    # Modify preference
+    # Modify boolean value
     config["weather_ui_on"] = not config["weather_ui_on"]
 
     # Dump back to file
@@ -17,11 +20,13 @@ def toggle_weather_ui():
 
 
 def toggle_news_ui():
+    """Change boolean value for 'news_ui_on' in config.json"""
+
     # Open config file, load as dictionary
     with open("config.json", "r") as f:
         config = json.load(f)
 
-    # Modify preference
+    # Modify boolean value
     config["news_ui_on"] = not config["news_ui_on"]
 
     # Dump back to file
@@ -30,11 +35,12 @@ def toggle_news_ui():
 
 
 def toggle_time_ui():
+    """Change boolean value for 'time_ui_on' in config.json"""
     # Open config file, load as dictionary
     with open("config.json", "r") as f:
         config = json.load(f)
 
-    # Modify preference
+    # Modify boolean value
     config["time_ui_on"] = not config["time_ui_on"]
 
     # Dump back to file
@@ -43,11 +49,12 @@ def toggle_time_ui():
 
 
 def toggle_ui():
+    """Change boolean value for 'ui_on' in config.json"""
     # Open config file, load as dictionary
     with open("config.json", "r") as f:
         config = json.load(f)
 
-    # Modify preferences
+    # Modify all boolean values
     if config["ui_on"]:
         config["weather_ui_on"] = False
         config["news_ui_on"] = False
@@ -66,11 +73,12 @@ def toggle_ui():
 
 def jarvis_change_ui(*args):
     """
-    Shows/hides UI elements based on speech.
+    Show/hide UI elements based on speech input.
 
     KEYWORD(s): 'show', 'hide'
     """
-    # List speech and keywords
+
+    # List speech and keywords/functions
     speech = args[0].split()
     keywords = {
         'weather': toggle_weather_ui,
@@ -93,9 +101,8 @@ def jarvis_change_ui(*args):
     return True
 
 
-
 def main():
-    jarvis_change_ui("show me the weather")
+    pass
 
 
 if __name__ == '__main__':

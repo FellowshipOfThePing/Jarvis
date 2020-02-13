@@ -1,3 +1,6 @@
+# Primary Jarvis functionality is based around the Jarvis object.
+# See imported info and config modules for API calls and json parsing.
+
 from pydub import AudioSegment
 from pydub.playback import play
 import speech_recognition as sr
@@ -12,9 +15,7 @@ from config import *
 
 class Jarvis(object):
     """
-    Handles the bulk of call/response mechanics.
-    
-    See imported weather modules for API calls and json parsing.
+    Represents an instance of the Jarvis assistant.
     """
     def __init__(self, launch_phrase='jarvis', debugger_enabled=False):
         self.launch_phrase = launch_phrase
@@ -74,7 +75,7 @@ class Jarvis(object):
         """
         Verifies if launch phrase was spoken or not.
         
-        If so, responds with Jarvis affirmation.
+        If so, responds with audio affirmation.
         """
         if speech is not None and self.launch_phrase in speech.lower():
             self.jarvis_response(random.choice(audio_paths['greetings']))
@@ -85,7 +86,7 @@ class Jarvis(object):
 
     def parse_speech_for_commands(self):
         """
-        Initializes listener, translates to text, and parses to determine proper response.
+        Initializes listener, translates audio to text, and parses for keywords to determine proper response.
         """
 
         # Begins actively listening (until told to stop)
@@ -122,7 +123,9 @@ class Jarvis(object):
 
 
     def jarvis_response(self, audio_path):
-        """Plays given audio file"""
+        """
+        Plays given audio file
+        """
         response = AudioSegment.from_wav(audio_path)
         play(response)
 
@@ -148,7 +151,7 @@ class Jarvis(object):
 
     def jarvis_off(self, *args):
         """
-        Switches Jarvis off entirely.
+        Ends Jarvis instance and terminates Python execution.
         
         KEYWORD: 'off'
         """
@@ -158,17 +161,23 @@ class Jarvis(object):
 
 
     def jarvis_recognition_error(self, *args):
-        """Responds with audio error message when google cannot recognize speech"""
+        """
+        Responds with audio error message when google cannot recognize speech
+        """
         self.jarvis_response("Audio/Other/caged_repeat_3.wav")
 
     
     def jarvis_request_error(self, *args):
-        """Reponds with audio when google cannot be reached"""
+        """
+        Reponds with audio when google cannot be reached
+        """
         self.jarvis_response("Audio/Other/caged_network_lost_wifi.wav")
 
 
     def no_keywords_found(self, *args):
-        """Reponds with audio when no keywords are found in speech"""
+        """
+        Reponds with audio when no keywords are found in speech
+        """
         self.jarvis_response("Audio/Other/caged_unavailable_0.wav")
 
 
@@ -194,6 +203,7 @@ class Jarvis(object):
 
 
 def main():
+    """Initialize Jarvis instance (typically called from Start.sh)"""
     s = Jarvis()
     s.start()
 

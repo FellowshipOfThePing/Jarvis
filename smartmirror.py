@@ -1,5 +1,6 @@
-# Taken from https://github.com/HackerShackOfficial/Smart-Mirror
-# as a template. Looking to revise or replace with node server UI.
+# Largely taken from https://github.com/HackerShackOfficial/Smart-Mirror, as a template, converted to Python3 and heavily modified. 
+# Looking to redo or replace with node.js server UI.
+# TODO: Comment UI Elements - Template had almost no documentation
 
 
 from tkinter import *
@@ -43,8 +44,7 @@ def setlocale(name): # thread proof function to work with locale
             locale.setlocale(locale.LC_ALL, saved)
 
 
-# maps open weather icons to
-# icon reading is not impacted by the 'lang' parameter
+# Maps weather API icon response to image assets
 icon_lookup = {
     'clear-day': "assets/Sun.png",                  # clear sky day
     'wind': "assets/Wind.png",                      #wind
@@ -62,10 +62,12 @@ icon_lookup = {
 }
 
 
+# ------------ UI Elements ------------ #
+
 class Clock(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg='black')
-        # ui status
+        # ui status - corresponds to config.json
         self.ui_on = True
         # initialize time label
         self.time1 = ''
@@ -134,6 +136,7 @@ class Clock(Frame):
 class Weather(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg='black')
+        # ui status - corresponds to config.json
         self.ui_on = True
         self.temperature = ''
         self.forecast = ''
