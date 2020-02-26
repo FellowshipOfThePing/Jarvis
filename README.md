@@ -2,9 +2,7 @@
 
 Jarvis is a homemade virtual assistant, built using audio of Paul Bettany’s ‘Jarvis’ voice and Google's speech recognition API. In this repository he is paired with a voice-interactive Tkinter UI, but could easily be used on his own.
 
-For copyright reasons, I will not be distributing the audio files used to create this program, but they are relatively easy to find using Google, and you can see Jarvis in action in the video embedded below.
-
-#### Video to be Embedded ####
+For copyright reasons, I will not be distributing the audio files used to create this program, but they are relatively easy to find using Google, and you can see Jarvis in action [here](https://youtu.be/CrxmwC2pocQ)
 
 
 ## How does he work? ##
