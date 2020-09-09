@@ -11,7 +11,7 @@ Jarvis' primary functionality is based on the Jarvis.py file, which is run in pa
 
 Once initialized, Jarvis listens for his name. Until he hears his name, he will not speak, but will always be listening.
 
-When activated using his name, you can ask him anything. At this point in production, there's a good chance he'll respond to most things with the default 'I can't do that right now' but new functionality is being developed every week. 
+When activated using his name, you can ask him anything. At this point in production, there's a good chance he'll respond to most things with the default 'I can't do that right now', but the way he's built leaves room for a lot of new actions.
 
 He listens for keywords (listed below), and depending on the combination and sequence of keywords, will respond in various ways.
 
